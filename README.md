@@ -10,7 +10,7 @@ If so, then this ~~garbage~~ jwLib is for you!
 //TODO: Make the README not garbage
 ```
 
-##How to use:
+## How to use:
 
 ```JavaScript
 window.onload=function(){
