@@ -2,51 +2,67 @@ try{jwLibs}catch(e){jwLibs={};}
 jwLibs.bulkDOM={
 	init:function(){
 		HTMLElement.prototype.jwBulkStyle=function(obj){
-			var s;
-			for (s in obj){this.style[s]=obj[s];}
+			// {"rule1":"val1", "rule2":"val2", ...}
+			var i;
+			for (i in obj){this.style[i]=obj[i];}
 			this.dispatchEvent(new CustomEvent("jwBulkStyle", {detail:{elem:this, rules:obj}}));
 			return this;
 		};
 		
-		HTMLElement.prototype.jwBulkAddClass=function(classes){
-			var c;
-			for (c in classes){this.classList.add(classes[c]);}
-			this.dispatchEvent(new CustomEvent("jwBulkAddClass", {detail:{elem:this, val:classes}}));
+		HTMLElement.prototype.jwBulkAddClass=function(arr){
+			// ["class1", "class2", ...]
+			var i;
+			for (i in arr){this.classList.add(arr[i]);}
+			this.dispatchEvent(new CustomEvent("jwBulkAddClass", {detail:{elem:this, val:arr}}));
 			return this;
 		}
-		HTMLElement.prototype.jwBulkRemoveClass=function(classes){
-			var c;
-			for (c in classes){this.classList.remove(classes[c]);}
-			this.dispatchEvent(new CustomEvent("jwBulkRemoveClass", {detail:{elem:this, val:classes}}));
+		HTMLElement.prototype.jwBulkRemoveClass=function(arr){
+			// ["class1", "class2", ...]
+			var i;
+			for (i in arr){this.classList.remove(arr[i]);}
+			this.dispatchEvent(new CustomEvent("jwBulkRemoveClass", {detail:{elem:this, val:arr}}));
 			return this;
 		};
-		HTMLElement.prototype.jwBulkToggleClass=function(classes){
-			var c;
-			for (c in classes){this.classList.toggle(classes[c]);}
-			this.dispatchEvent(new CustomEvent("jwBulkToggleClass", {detail:{elem:this, val:classes}}));
+		HTMLElement.prototype.jwBulkToggleClass=function(arr){
+			// ["class1", "class2", ...]
+			var i;
+			for (i in arr){this.classList.toggle(arr[i]);}
+			this.dispatchEvent(new CustomEvent("jwBulkToggleClass", {detail:{elem:this, val:arr}}));
 			return this;
 		};
 		
 		HTMLElement.prototype.jwBulkAddEventListener=function(obj){
-			var ev;
-			for (ev in obj){this.addEventListener(ev, obj[ev]);}
+			// {"eventName1":[function1, function2, ...], "eventName2":[function1, function2, ...], ...}
+			var type, i;
+			for (type in obj){
+				for (i in obj[type]){
+					this.addEventListener(type, obj[type][i]);
+				}
+			}
 			this.dispatchEvent(new CustomEvent("jwBulkAddEventListener", {detail:{elem:this, rules:obj}}));
 			return this;
 		};
 		HTMLElement.prototype.jwBulkRemoveEventListener=function(obj){
-			var ev;
-			for (ev in obj){this.removeEventListener(ev, obj[ev]);}
+			// {"eventName1":[function, function, ...], "eventName2":[function, function, ...], ...}
+			var type, i;
+			for (type in obj){
+				for (i in obj[type]){
+					this.removeEventListener(type, obj[type][i]);
+				}
+			}
 			this.dispatchEvent(new CustomEvent("jwBulkRemoveEventListener", {detail:{elem:this, rules:obj}}));
 			return this;
 		};
 		
 		HTMLElement.prototype.jwBulkSetAttribute=function(obj){
+			// {"name1":"val1", "name2":"val2", ...}
 			var name;
 			for (name in obj){this.setAttribute(name, obj[name]);}
 			this.dispatchEvent(new CustomEvent("jwBulkSetAttribute", {detail:{elem:this, attrs:obj}}));
 			return this;
 		};
 		HTMLElement.prototype.jwBulkSetAttributeNS=function(obj){
+			// {"name1":"val1", "name2":"val2", ...}
 			var name;
 			for (name in obj){this.setAttributeNS(name, obj[name]);}
 			this.dispatchEvent(new CustomEvent("jwBulkSetAttributeNS", {detail:{elem:this, attrs:obj}}));
@@ -87,8 +103,7 @@ jwLibs.bulkDOM={
 			var elem;
 			for (elem=0; elem<this.length; elem++){
 				this[elem].classList.toggle(classes);
-				evt=new CustomEvent("jwBulkToggleClassMulti", {detail:{elems:this, val:classes}});
-				this[elem].dispatchEvent(evt);
+				this[elem].dispatchEvent(new CustomEvent("jwBulkToggleClassMulti", {detail:{elems:this, val:classes}}));
 			}
 			return this;
 		};
