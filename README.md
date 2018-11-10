@@ -69,4 +69,5 @@ Note: The event will trigger once for every element.
 | `jwBulkRemoveEventListener` | `{"eventName1":[func1, func2, ...], "eventName2":[func1, func2, ...], ...}` |
 | `jwBulkSetAttribute` | `{"name1":"val1", "name2":"val2", ...}` |
 | `jwBulkSetAttributeNS` | `{"name1":"val1", "name2":"val2", ...}` |
+
 The above functions are added to `HTMLElement.prototype` and `HTMLCollection.prototype` when `jwLibs.bulkDOM.init` is called. The functions on `HTMLCollection` runs the equivalent function on every element in the collection.
