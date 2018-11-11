@@ -1,8 +1,11 @@
 
 # jwBulkDOM
 
-Do you hate having to iterate over a bunch of elements to add a class to all of them?
-Do you want to avoid that without using jQuery?
+![Jank: 100%](https://img.shields.io/badge/jank-100%25-red.svg)
+![Estimates completion: 30%](https://img.shields.io/badge/Estimated%20completion-30%25-Orange.svg)
+
+Do you hate having to iterate over a bunch of elements to add a class to all of them?\
+Do you want to avoid that without using jQuery?\
 If so, then this library is for you!
 
 With this library, you can use new `jwBulk` functions on `HTMLElement` and `HTMLCollection` objects to add/remove styles, eventsListeners, etc.! 
