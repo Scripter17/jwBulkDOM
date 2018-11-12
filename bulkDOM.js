@@ -1,8 +1,33 @@
-try{jwLibs}catch(e){jwLibs={}; window.jwActiveLibs=[];}
+try{jwLibs}catch(e){jwLibs={}; window.jwActiveLibs=[]; window.jwLibData={};}
 jwLibs.bulkDOM={
 	init:function(){
 		window.jwActiveLibs.push("bulkDOM");
-		
+		window.jwLibData.bulkDOM={
+			events:{
+				normal:[
+					"jwBulkStyle",
+					"jwBulkAddClass",
+					"jwBulkRemoveClass",
+					"jwBulkToggleClass",
+					"jwBulkAddEventListener",
+					"jwBulkRemoveEventListener",
+					"jwBulkSetAttribute",
+					"jwBulkSetAttributeNS",
+					"jwBulkSetProp"
+				],
+				multi:[
+					"jwBulkStyleMulti",
+					"jwBulkAddClassMulti",
+					"jwBulkRemoveClassMulti",
+					"jwBulkToggleClassMulti",
+					"jwBulkAddEventListenerMulti",
+					"jwBulkRemoveEventListenerMulti",
+					"jwBulkSetAttributeMulti",
+					"jwBulkSetAttributeNSMulti",
+					"jwBulkSetPropMulti"
+				]
+			}
+		};
 		// CSS styling
 		HTMLElement.prototype.jwBulkStyle=function(obj, ef, index){
 			// {"rule1":"val1", "rule2":"val2", ...}
@@ -33,7 +58,7 @@ jwLibs.bulkDOM={
 			}
 			this.dispatchEvent(new CustomEvent("jwBulkAddClass", {detail:{elem:this, val:arr}}));
 			return this;
-		}
+		};
 		HTMLElement.prototype.jwBulkRemoveClass=function(arr, ef, index){
 			// ["class1", "class2", ...]
 			var i;
@@ -121,13 +146,22 @@ jwLibs.bulkDOM={
 		HTMLElement.prototype.jwBulkSetProp=function(obj, ef, index){
 			// obj={"key1":"val1", "key2":"val2", ...}
 			// ef=<bool> (True=evaluate object values if they're functions)
-			var name;
+			var nameRaw, name, v, i;
 			index=index||0;
-			for (name in obj){
-				if (ef && typeof obj[name]=="function"){
-					this[name]=obj[name](obj, name, this, index)
+			for (nameRaw in obj){
+				// I have no idea how (or even if) this works. But it works for when the key is only 2 layers (like "style.color")
+				// <BlackMagic>
+				name=nameRaw.split(".");
+				v=this;
+				for (i in name){
+					if (i==name.length-1){break;}
+					v=this[name[i]];
+				}
+				// </BlackMagic>
+				if (ef && typeof obj[nameRaw]=="function"){
+					v[name[i]]=obj[nameRaw](obj, nameRaw, this, index);
 				} else {
-					this[name]=obj[name]
+					v[name[i]]=obj[nameRaw];
 				}
 			}
 			this.dispatchEvent(new CustomEvent("jwBulkSetProp", {detail:{elem:this, attrs:obj}}));
@@ -135,12 +169,17 @@ jwLibs.bulkDOM={
 		};
 		HTMLElement.prototype.jwBulkGetProp=function(arr){
 			// ["prop1", "prop2", ...]
-			var i, ret;
+			var name, ret, key, v;
 			ret={};
 			for (i in arr){
-				ret[arr[i]]=this[arr[i]]
+				name=arr[i].split(".")
+				v=this;
+				for (key in name){
+					v=v[name[key]]
+				}
+				ret[arr[i]]=v;
 			}
-			return ret
+			return ret;
 		};
 		
 		//   O-------------------------------------------------O
@@ -168,7 +207,7 @@ jwLibs.bulkDOM={
 				this[elem].dispatchEvent(new CustomEvent("jwBulkAddClassMulti", {detail:{elems:this, val:classes}}));
 			}
 			return this;
-		}
+		};
 		HTMLCollection.prototype.jwBulkRemoveClass=function(classes, ef){
 			// ["class1", "class2", ...]
 			var elem;
@@ -193,7 +232,7 @@ jwLibs.bulkDOM={
 			// {"eventName1":[function1, function2, ...], "eventName2":[function1, function2, ...], ...}
 			var elem;
 			for (elem=0; elem<this.length; elem++){
-				this[elem].jwBulkAddEventListener(obj)
+				this[elem].jwBulkAddEventListener(obj);
 				this[elem].dispatchEvent(new CustomEvent("jwBulkAddEventListenerMulti", {detail:{elems:this, funcs:obj}}));
 			}
 			return this;
@@ -202,7 +241,7 @@ jwLibs.bulkDOM={
 			// {"eventName1":[function, function, ...], "eventName2":[function, function, ...], ...}
 			var elem;
 			for (elem=0; elem<this.length; elem++){
-				this[elem].jwBulkRemoveEventListener(obj)
+				this[elem].jwBulkRemoveEventListener(obj);
 				this[elem].dispatchEvent(new CustomEvent("jwBulkRemoveEventListenerMulti", {detail:{elems:this, funcs:obj}}));
 			}
 			return this;
@@ -213,7 +252,7 @@ jwLibs.bulkDOM={
 			// {"name1":"val1", "name2":"val2", ...}
 			var elem;
 			for (elem=0; elem<this.length; elem++){
-				this[elem].jwBulkSetAttribute(obj, ef, elem)
+				this[elem].jwBulkSetAttribute(obj, ef, elem);
 				this[elem].dispatchEvent(new CustomEvent("jwBulkSetAttributeMulti", {detail:{elems:this, attrs:obj}}));
 			}
 			return this;
@@ -222,7 +261,7 @@ jwLibs.bulkDOM={
 			// {"name1":"val1", "name2":"val2", ...}
 			var elem;
 			for (elem=0; elem<this.length; elem++){
-				this[elem].jwBulkSetAttributeNS(obj, ef, elem)
+				this[elem].jwBulkSetAttributeNS(obj, ef, elem);
 				this[elem].dispatchEvent(new CustomEvent("jwBulkSetAttributeNSMulti", {detail:{elems:this, attrs:obj}}));
 			}
 			return this;
@@ -233,7 +272,7 @@ jwLibs.bulkDOM={
 			// {"key1":"val1", "key2":"val2", ...}
 			var elem;
 			for (elem=0; elem<this.length; elem++){
-				this[elem].jwBulkSetProp(obj, ef, elem)
+				this[elem].jwBulkSetProp(obj, ef, elem);
 				this[elem].dispatchEvent(new CustomEvent("jwBulkSetPropMulti", {detail:{elems:this, attrs:obj}}));
 			}
 			return this;
@@ -243,13 +282,13 @@ jwLibs.bulkDOM={
 			var ret, elem, elemprops, prop;
 			ret=[];
 			for (elem=0; elem<this.length; elem++){
-				ret[elem]={elem:this[elem], props:{}}
-				proparr=this[elem].jwBulkGetProp(arr)
+				ret[elem]={elem:this[elem], props:{}};
+				proparr=this[elem].jwBulkGetProp(arr);
 				for (prop in proparr){
-					ret[elem].props[prop]=proparr[prop]
+					ret[elem].props[prop]=proparr[prop];
 				}
 			}
-			return ret
+			return ret;
 		};
 	}
 };

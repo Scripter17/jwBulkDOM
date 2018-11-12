@@ -101,6 +101,7 @@ window.onload=function(){
 	console.log(p.jwBulkGetProp(["innerHTML"]));
 }
 ```
+Side note: For getting/setting properties that requires using more than one object key, you can use `"key1.key2"`. If your key requires using a period, then you're out of luck. Heck, I can't even confirm if doing `"key1.key2.key3"` even *works* for setting.
 # Reference
 
 | Property Name | Input Format | `ef` compatible? | Return Format 
