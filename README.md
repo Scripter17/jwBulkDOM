@@ -1,14 +1,11 @@
-
 # jwBulkDOM
 
-![Jank: 100%](https://img.shields.io/badge/jank-100%25-red.svg)
-![Estimates completion: 30%](https://img.shields.io/badge/Estimated%20completion-30%25-Orange.svg)
-
+![Jank: 60%](https://img.shields.io/badge/Jank-60%25-orange.svg) ![Estimated completion: 30%](https://img.shields.io/badge/Estimated%20completion-30%25-Orange.svg) [![Lisence: DBAD](https://img.shields.io/badge/Lisence-DBAD-green.svg)](#License)
 Do you hate having to iterate over a bunch of elements to add a class to all of them?\
 Do you want to avoid that without using jQuery?\
 If so, then this library is for you!
 
-With this library, you can use new `jwBulk` functions on `HTMLElement` and `HTMLCollection` objects to add/remove styles, eventsListeners, etc.! 
+With this library, you can use new `jwBulk` functions on `HTMLElement` and `HTMLCollection` objects to modify styles, eventsListeners, etc!\
 While `HTMLElement` will only modify one element with multiple changes, `HTMLCollection` lets you modify all of the elements in the collection!
 
 ## How to use:
@@ -74,3 +71,34 @@ Note: The event will trigger once for every element.
 | `jwBulkSetAttributeNS` | `{"name1":"val1", "name2":"val2", ...}` |
 
 The above functions are added to `HTMLElement.prototype` and `HTMLCollection.prototype` when `jwLibs.bulkDOM.init` is called. The functions on `HTMLCollection` runs the equivalent function on every element in the collection.
+
+ # License
+ This code/repository is released under the "[Don't Be a Dick](https://dbad-license.org/)" license, which has the following terms:
+ ```
+# DON'T BE A DICK PUBLIC LICENSE
+
+> Version 1.1, December 2016
+
+> Copyright (C) 2018 James C. Wise
+
+Everyone is permitted to copy and distribute verbatim or modified
+copies of this license document.
+
+> DON'T BE A DICK PUBLIC LICENSE
+> TERMS AND CONDITIONS FOR COPYING, DISTRIBUTION AND MODIFICATION
+
+1. Do whatever you like with the original work, just don't be a dick.
+
+   Being a dick includes - but is not limited to - the following instances:
+
+ 1a. Outright copyright infringement - Don't just copy this and change the name.
+ 1b. Selling the unmodified original with no work done what-so-ever, that's REALLY being a dick.
+ 1c. Modifying the original work to contain hidden harmful content. That would make you a PROPER dick.
+
+2. If you become rich through modifications, related works/services, or supporting the original work,
+share the love. Only a dick would make loads off this work and not buy the original work's
+creator(s) a pint.
+
+3. Code is provided with no warranty. Using somebody else's code and bitching when it goes wrong makes
+you a DONKEY dick. Fix the problem yourself. A non-dick would submit the fix back.
+```
