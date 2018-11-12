@@ -1,6 +1,6 @@
 # jwBulkDOM
 
-![Jank: 60%](https://img.shields.io/badge/Jank-60%25-orange.svg) ![Estimated completion: 30%](https://img.shields.io/badge/Estimated%20completion-30%25-Orange.svg) [![License: DBAD](https://img.shields.io/badge/License-DBAD-green.svg)](#License)
+![Jank: 70%](https://img.shields.io/badge/Jank-70%25-orange.svg) ![Estimated completion: 50%](https://img.shields.io/badge/Estimated%20completion-50%25-ece000.svg) [![License: DBAD](https://img.shields.io/badge/License-DBAD-green.svg)](#License)
 
 Do you hate having to iterate over a bunch of elements to add a class to all of them?\
 Do you want to avoid that without using jQuery?\
@@ -36,6 +36,8 @@ window.onload=function(){
 }
 ```
 
+## jwBulkAdd/RemoveEventListener
+
 If that's not cool enough, bulk modifications also trigger events!
 
 ```JavaScript
@@ -60,16 +62,54 @@ window.onload=function(){
 ```
 Note: The event will trigger once for every element.
 
-| Property Name | Input Format |
-|--|--|
-| `jwBulkStyle` | `{"rule1":"val1", "rule2":"val2", ...}` |
-| `jwBulkAddClass` | `["class1", "class2", ...]` |
-| `jwBulkRemoveClass` | `["class1", "class2", ...]` |
-| `jwBulkToggleClass` | `["class1", "class2", ...]` |
-| `jwBulkAddEventListener` | `{"eventName1":[func1, func2, ...], "eventName2":[func1, func2, ...], ...}` |
-| `jwBulkRemoveEventListener` | `{"eventName1":[func1, func2, ...], "eventName2":[func1, func2, ...], ...}` |
-| `jwBulkSetAttribute` | `{"name1":"val1", "name2":"val2", ...}` |
-| `jwBulkSetAttributeNS` | `{"name1":"val1", "name2":"val2", ...}` |
+Sometimes you want to apply slightly different modifications to multiple elements, well, with the `ef` input you can do that! `ef` stands for `Evaluate Function`, and if it's true then any functions in the input values will be evaluated before being applied!\
+For example, the following code makes the first `<p>` element red and the second one blue:
+```JavaScript
+window.onload=function(){
+	jwLibs.bulkDOM.init();
+	p=document.getElementsByTagName("p");
+	p.jwBulkStyle({"color":function(obj, rule, elem, index){return ["red","blue"][index]}},true);
+}
+```
+When applying a manipulation with a function value, the function should be able to take the following inputs:
+* `obj` - The object of the manipulations (the first argument in a bulk function)
+* `key` - Current object key/property being modified
+* `elem` - The current element (always defined as `this` in the function declaration scope)
+* `index` - The index of the current element in the `HTMLCollection`. (Note: Defaults to `0` when the bulk function is on a single element)
+
+## jwBulkGet/SetProp
+
+For those times when the other functions don't suit your needs, you may need to set properties on each `HTMLElement` object directly.\
+For example, the following code sets the `innerHTML` of every `<p>` element to "asdf".
+```JavaScript
+window.onload=function(){
+	jwLibs.bulkDOM.init();
+	p=document.getElementsByTagName("p");
+	p.jwBulkSetProp({"innerHTML":"asdf"});
+}
+```
+And, for the reverse, you can use `jwBulkGetProp`:
+```JavaScript
+window.onload=function(){
+	jwLibs.bulkDOM.init();
+	p=document.getElementsByTagName("p");
+	console.log(p.jwBulkGetProp(["innerHTML"]));
+}
+```
+# Reference
+
+| Property Name | Input Format | `ef` compatible? | Return Format 
+|--|--|--|--|
+| `jwBulkStyle` | `{"rule1":"val1", "rule2":"val2", ...}` | Yes | `undefined`
+| `jwBulkAddClass` | `["class1", "class2", ...]` | Yes | `undefined`
+| `jwBulkRemoveClass` | `["class1", "class2", ...]` | Yes | `undefined`
+| `jwBulkToggleClass` | `["class1", "class2", ...]` | Yes | `undefined`
+| `jwBulkAddEventListener` | `{"eventName1":[func1, func2, ...], "eventName2":[func1, func2, ...], ...}` | No | `undefined`
+| `jwBulkRemoveEventListener` | `{"eventName1":[func1, func2, ...], "eventName2":[func1, func2, ...], ...}` | No | `undefined`
+| `jwBulkSetAttribute` | `{"name1":"val1", "name2":"val2", ...}` | Yes | `undefined`
+| `jwBulkSetAttributeNS` | `{"name1":"val1", "name2":"val2", ...}` | Yes | `undefined`
+|`jwBulkSetProp` | `{"key1":"val1", "key2":"val2", ...}` | Yes | `undefined`
+|`jwBulkGetProp` | `["prop1", "prop2", ...]` | No | Single: `{"prop1":"val1", "prop2":"val2"}`<br/>Collection: `[{"elem":"elem1", "props":{"prop1":"val1", "prop2":"val2", ...}}, ...]`
 
 The above functions are added to `HTMLElement.prototype` and `HTMLCollection.prototype` when `jwLibs.bulkDOM.init` is called. The functions on `HTMLCollection` runs the equivalent function on every element in the collection.
 
