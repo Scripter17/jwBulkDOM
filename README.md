@@ -1,6 +1,6 @@
 # jwBulkDOM
 
-![Jank: 60%](https://img.shields.io/badge/Jank-60%25-orange.svg) ![Estimated completion: 30%](https://img.shields.io/badge/Estimated%20completion-30%25-Orange.svg) [![Lisence: DBAD](https://img.shields.io/badge/Lisence-DBAD-green.svg)](#License)
+![Jank: 60%](https://img.shields.io/badge/Jank-60%25-orange.svg) ![Estimated completion: 30%](https://img.shields.io/badge/Estimated%20completion-30%25-Orange.svg) [![License: DBAD](https://img.shields.io/badge/License-DBAD-green.svg)](#License)
 
 Do you hate having to iterate over a bunch of elements to add a class to all of them?\
 Do you want to avoid that without using jQuery?\
