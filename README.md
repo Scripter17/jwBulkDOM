@@ -1,13 +1,15 @@
 # jwBulkDOM
 
-![Jank: 70%](https://img.shields.io/badge/Jank-70%25-orange.svg) ![Estimated completion: 70%](https://img.shields.io/badge/Estimated%20completion-70%25-ece000.svg) ![License: DBAD](https://img.shields.io/badge/License-DBAD-green.svg)
+![Jank: 70%](https://img.shields.io/badge/Jank-70%25-orange.svg) ![Estimated completion: 75%](https://img.shields.io/badge/Estimated%20completion-75%25-ece000.svg) ![License: DBAD](https://img.shields.io/badge/License-DBAD-green.svg)
 
 Do you hate having to iterate over a bunch of elements to add a class to all of them?\
 Do you want to avoid that without using jQuery?\
 If so, then this library is for you!
 
-With this library, you can use new `jwBulk` functions on `HTMLElement` and `HTMLCollection` objects to modify multiple styles, classes, and more at once!\
+With this library, you can use the new `jwBulk` functions on `HTMLElement` and `HTMLCollection` objects to modify multiple styles, classes, and more at once!\
 While `HTMLElement` will only modify one element with multiple changes, `HTMLCollection` lets you modify all of the elements in the collection!
+
+(Side note: there is also support for `HTMLParagraphElement` and `NodeList` objects, however this is experimental and largely untested)
 
 # Examples/de-facto documentation
 ## jwBulkStyle
@@ -62,6 +64,10 @@ window.onload=function(){
 }
 ```
 Note: The event will trigger once for every element.
+
+***
+
+`jwBulkRemoveEventListener` works as you'd expect and takes the same input format, but it will only work if the event listener in question is *not* an anonymous function.
 
 ## Function Evaluation
 Sometimes you want to apply slightly different modifications to multiple elements, well, with the `ef` input you can do that! `ef` stands for `Evaluate Function`, and if it's true then any functions in the input values will be evaluated before being applied!\
