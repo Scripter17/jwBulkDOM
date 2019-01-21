@@ -146,24 +146,20 @@ jwLibs.bulkDOM={
 		HTMLParagraphElement.prototype.jwBulkSetProp=HTMLElement.prototype.jwBulkSetProp=function(obj, ef, index){
 			// obj={"key1":"val1", "key2":"val2", ...}
 			// ef=<bool> (True=evaluate object values if they're functions)
-			var nameRaw, name, v, i;
+			//var nameRaw, name, v, i;
 			index=index||0;
-			for (nameRaw in obj){
-				// I have no idea how (or even if) this works. But it works for when the key is only 2 layers (like "style.color")
-				// <BlackMagic>
-				name=nameRaw.split(".");
-				v=this;
-				for (i in name){
-					if (i==name.length-1){break;}
-					v=this[name[i]];
+			var path, pathList=[], i, chain="";
+			for (path in obj){
+				if (typeof obj[path]=="function"){obj[path]=obj[path](obj, nameRaw, this, index);}
+				pathList=path.split(".")
+				for (i=0; i<pathList.length; i++){
+					chain+="[pathList["+i+"]]";
 				}
-				// </BlackMagic>
-				if (ef && typeof obj[nameRaw]=="function"){
-					v[name[i]]=obj[nameRaw](obj, nameRaw, this, index);
-				} else {
-					v[name[i]]=obj[nameRaw];
-				}
+				eval("this"+chain+"=obj[path]"); // It's a sin, but at least it works this time.
+				//console.log("this"+chain+"=obj[path]");
+				chain="";
 			}
+			
 			this.dispatchEvent(new CustomEvent("jwBulkSetProp", {detail:{elem:this, attrs:obj}}));
 			return this;
 		};
